@@ -1,0 +1,9 @@
+<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+<div class="logo"></div>
+<div class="login-block">
+    <h1>Login</h1>
+    <input matInput placeholder="Your email" [(ngModel)]="user.email">
+    <input type="password" matInput placeholder="Your password" [(ngModel)]="user.password">
+    <button mat-raised-button color="primary" (click)="login()">LOGIN</button>
+    <button mat-button routerLink="/register">Register</button>
+</div>
