@@ -24,7 +24,7 @@ export class ProductDetailComponent implements OnInit {
     this.loading=true;
     if(this.data.id == undefined)
     {
-      this.api.post('books',this.data).subscribe(result=>{
+      this.api.post('perpustakaans',this.data).subscribe(result=>{
         this.dialogRef.close(result);
         this.loading=false;
       },error=>{
@@ -32,7 +32,7 @@ export class ProductDetailComponent implements OnInit {
         alert('Tidak dapat menyimpan data');
       });
     }else{
-      this.api.put('books/'+this.data.id,this.data).subscribe(result=>{
+      this.api.put('perpustakaans/'+this.data.id,this.data).subscribe(result=>{
         this.dialogRef.close(result);
         this.loading=false;
       },error=>{

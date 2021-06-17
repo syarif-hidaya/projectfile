@@ -24,23 +24,23 @@
                 <th align="right"></th>
             </thead>
             <tbody>
-                <tr *ngFor="let book of books; let idx=index">
+                <tr *ngFor="let perpustakaan of perpustakaans; let idx=index">
                     <td>
-                        <button mat-icon-button (click)="downloadFile(book)" *ngIf="book.url != '' ">
-                            <mat-icon>download</mat-icon>
-                        </button>
+                      
+                            
+                        
                     </td>
                     <td>{{idx+1}}</td>
-                    <td>{{book.title}}</td>
-                    <td>{{book.author}}</td>
-                    <td>{{book.publisher}}</td>
-                    <td>{{book.year}}</td>
-                    <td>{{book.isbn}}</td>
-                    <td>{{book.price}}</td>
+                    <td>{{perpustakaan.title}}</td>
+                    <td>{{perpustakaan.author}}</td>
+                    <td>{{perpustakaan.publisher}}</td>
+                    <td>{{perpustakaan.year}}</td>
+                    <td>{{perpustakaan.genre}}</td>
+                    <td>{{perpustakaan.grade}}</td>
                     <td align="right">
 
-                        <button mat-button color="primary" (click)="ProductDetail(book,idx)">Edit Buku</button>
-                        <button mat-button color="primary" (click)="DeleteProduct(book.id, idx)"[disabled]="loadingDelete[idx]">{{loadingDelete[idx] ? 'Menghapus..':'Delete'}}</button>
+                        <button mat-button color="primary" (click)="ProductDetail(perpustakaan,idx)">Edit Buku</button>
+                        <button mat-button color="primary" (click)="DeleteProduct(perpustakaan.id, idx)"[disabled]="loadingDelete[idx]">{{loadingDelete[idx] ? 'Menghapus..':'Delete'}}</button>
                     </td>
                 </tr>
             </tbody>

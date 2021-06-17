@@ -12,8 +12,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class ProductComponent implements OnInit {
   title:any;
-  book:any={};
-  books:any=[];
+  perpustakaan:any={};
+  perpustakaans:any=[];
   constructor(
     public dialog:MatDialog,
     public api:ApiService
@@ -22,8 +22,8 @@ export class ProductComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.title='Product';
-    this.book={
+    this.title='Buku';
+    this.perpustakaan={
       title:'angular pertama',
       author:'afnanda',
       publisher:'ada aja',
@@ -31,15 +31,16 @@ export class ProductComponent implements OnInit {
       isbn:'244242',
       price:3000000
     };
-    this.getBooks();
+    this.getperpustakaans();
   }
+  
 
   loading:boolean | undefined;
-  getBooks()
+  getperpustakaans()
   {
     this.loading=true;
-    this.api.get('bookswithauth').subscribe(result=>{
-      this.books=result;
+    this.api.get('perpustakaans').subscribe(result=>{
+      this.perpustakaans=result;
       this.loading=false;
     },error=>{
       this.loading=false;
@@ -66,8 +67,8 @@ export class ProductComponent implements OnInit {
         dialog.afterClosed().subscribe(result=> {
          if(result)
          {
-          if(idx==-1)this.books.push(result);
-          else this.books[idx]=data;
+          if(idx==-1)this.perpustakaans.push(result);
+          else this.perpustakaans[idx]=data;
          }
         });
       }
@@ -80,8 +81,8 @@ export class ProductComponent implements OnInit {
         if(conf)
         this.loadingDelete[idx]=true;
         {
-          this.api.delete('books/'+id).subscribe(result=>{
-            this.books.splice(idx,1);
+          this.api.delete('perpustakaans/'+id).subscribe(result=>{
+            this.perpustakaans.splice(idx,1);
             this.loadingDelete[idx]=false;
           },error=>{
             this.loadingDelete[idx]=false;
