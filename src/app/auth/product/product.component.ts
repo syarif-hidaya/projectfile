@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
-
-import { FileUploaderComponent } from 'src/app/admin/file-uploader/file-uploader.component';
 import { ProductDetailComponent } from 'src/app/admin/product-detail/product-detail.component';
-import { ApiService } from 'src/app/services/api.service';
+
 
 @Component({
   selector: 'app-product',
@@ -12,49 +12,37 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class ProductComponent implements OnInit {
   title:any;
-  perpustakaan:any={};
-  perpustakaans:any=[];
+  perpustakaans:any={};
+  userData:any = {};
   constructor(
     public dialog:MatDialog,
-    public api:ApiService
+    public auth:AngularFireAuth,
+    public db :AngularFirestore
   ) {
 
    }
 
   ngOnInit(): void {
     this.title='Buku';
-    this.perpustakaan={
-      title:'angular pertama',
-      author:'afnanda',
-      publisher:'ada aja',
-      year:2020,
-      isbn:'244242',
-      price:3000000
-    };
-    this.getperpustakaans();
+    this.auth.user.subscribe(user=>{
+      this.userData = user;
+      this.getPerpustakaans();
+    })
   }
-  
 
   loading:boolean | undefined;
-  getperpustakaans()
+  getPerpustakaans()
   {
     this.loading=true;
-    this.api.get('perpustakaans').subscribe(result=>{
+    this.db.collection('perpustakaans',ref=>{
+      return ref.where('uid','==',this.userData.uid);
+    }).valueChanges({idField : 'id'}).subscribe(result=>{
+      console.log(result);
       this.perpustakaans=result;
       this.loading=false;
     },error=>{
       this.loading=false;
-    })
-  /*
-    this.loading=true;
-    this.api.get('books').subscribe(result=>{
-      this.books=result;
-      this.loading=false;
-    },eror=>{
-      this.loading=false;
-      alert('ada masalah saat pengambilan data... Coba lagi deh!!!');
-    })
-    */
+    });
   }
 
 
@@ -65,11 +53,7 @@ export class ProductComponent implements OnInit {
           data: data,
       });
         dialog.afterClosed().subscribe(result=> {
-         if(result)
-         {
-          if(idx==-1)this.perpustakaans.push(result);
-          else this.perpustakaans[idx]=data;
-         }
+        return;
         });
       }
 
@@ -79,31 +63,15 @@ export class ProductComponent implements OnInit {
       {
         var conf=confirm('Delete item?');
         if(conf)
-        this.loadingDelete[idx]=true;
         {
-          this.api.delete('perpustakaans/'+id).subscribe(result=>{
+          this.db.collection('perpustakaans').doc(id).delete().then(result=>{
             this.perpustakaans.splice(idx,1);
             this.loadingDelete[idx]=false;
-          },error=>{
+          }).catch(error=>{
             this.loadingDelete[idx]=false;
             alert('Tidak dapat menghapus data');
           });
         }
       }
-
-      Uploadfile(data: any)
-      {
-        let dialog= this.dialog.open(FileUploaderComponent, {
-          width: '400px',
-          data: data
-      });
-        dialog.afterClosed().subscribe(result=> {
-        return;
-        })
-      }
-      downloadFile(data:any)
-      {
-       
-       
-      }
+      
     }
